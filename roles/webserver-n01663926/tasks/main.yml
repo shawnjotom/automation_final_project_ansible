@@ -1,0 +1,31 @@
+---
+# tasks file for webserver-n01663926
+- name: Install Apache web server
+  ansible.builtin.package:
+    name: "{{ apache_service_name }}"
+    state: present
+
+- name: Create website files on the automation server
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: "{{ item.name }}"
+  loop: "{{ website_files }}"
+  delegate_to: localhost
+
+- name: Copy website files to nodes
+  ansible.builtin.copy:
+    src: "{{ item.name }}"
+    dest: "/var/www/html/index.html"
+  loop: "{{ website_files }}"
+  notify: Start Apache
+
+- name: Set permissions on website files
+  ansible.builtin.file:
+    path: "/var/www/html/index.html"
+    mode: "0444"
+
+- name: Ensure Apache service is started and enabled
+  ansible.builtin.service:
+    name: "{{ apache_service_name }}"
+    state: started
+    enabled: yes

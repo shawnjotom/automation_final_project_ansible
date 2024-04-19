@@ -1,0 +1,36 @@
+---
+# tasks file for user-n01663926
+
+- name: Add group cloudadmins
+  group:
+    name: cloudadmins
+    state: present
+
+# -name: user creation
+#   user:
+#     name: "{{ item.name }}"
+#     create_home: True
+#   loop: "{{ users }}"
+
+- name: Add users to groups
+  user:
+    name: "{{ item.name }}"
+    groups: cloudadmins,wheel
+  loop: "{{ users }}"
+
+- name: Generate SSH keys for users
+  user:
+    generate_ssh_key: True
+    state: present
+    name: "{{ item.name }}"
+    force: True
+  loop: "{{ users }}"
+
+- name: Import SSH keys
+  fetch:
+    src: "/home/{{item.name}}/.ssh/id_rsa"
+    dest: "~/id_rsa_{{item.name}}"
+    flat: true
+  loop: "{{ users }}"
+
+

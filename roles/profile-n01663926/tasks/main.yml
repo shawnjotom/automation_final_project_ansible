@@ -1,0 +1,12 @@
+---
+# tasks file for profile-n01663926
+
+- name: Append lines to /etc/profile
+  blockinfile:
+    path: /etc/profile
+    block: |
+      # Test block added by Ansible for {{ username }}
+      export TMOUT=1500
+  become: yes
+  tags: 
+    - profile

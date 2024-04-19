@@ -1,0 +1,63 @@
+---
+- name: Unmount part1 if mounted
+  mount:
+   path: "{{ part1_mount }}"
+   src: "/dev/sdc1"
+   state: unmounted
+  become: yes
+  ignore_errors: yes
+
+- name: Partition disk for part1
+  parted:
+   device: "/dev/sdc"
+   number: 1
+   state: present
+   part_end: "{{ part1_size }}GB"
+  become: yes
+
+- name: Format part1
+  filesystem:
+   fstype: "{{ part1_fs }}"
+   dev: "/dev/sdc1"
+   force: yes
+  become: yes
+
+- name: Mount part1
+  mount:
+   path: "{{ part1_mount }}"
+   src: "/dev/sdc1"
+   fstype: "{{ part1_fs }}"
+   state: mounted
+  become: yes
+
+- name: Unmount part2 if mounted
+  mount:
+   path: "{{ part2_mount }}"
+   src: "/dev/sdc2"
+   state: unmounted
+  become: yes
+  ignore_errors: yes
+
+- name: Partition disk for part2
+  parted:
+   device: "/dev/sdc"
+   number: 2
+   state: present
+   part_start: "{{ part1_size }}GB"
+   part_end: "{{ part1_size + part2_size }}GB"
+  become: yes
+
+- name: Format part2
+  filesystem:
+   fstype: "{{ part2_fs }}"
+   dev: "/dev/sdc2"
+   force: yes
+  become: yes
+
+- name: Mount part2
+  mount:
+   path: "{{ part2_mount }}"
+   src: "/dev/sdc2"
+   fstype: "{{ part2_fs }}"
+   state: mounted
+  become: yes

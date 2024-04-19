@@ -1,0 +1,10 @@
+---
+# vars file for datadisk-n01663926
+disk_size: 10
+part1_size: 4
+part1_fs: xfs
+part1_mount: /part1
+
+part2_size: 5
+part2_fs: ext4
+part2_mount: /part2

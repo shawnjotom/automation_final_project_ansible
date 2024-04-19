@@ -1,0 +1,11 @@
+---
+- name: Playbook for final_project
+  hosts: linux
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - datadisk-n01663926
+    - profile-n01663926
+    - user-n01663926
+    - webserver-n01663926

@@ -1,0 +1,25 @@
+[linux]
+vm-linux-01.canadacentral.cloudapp.azure.com
+vm-linux-02.canadacentral.cloudapp.azure.com
+vm-linux-03.canadacentral.cloudapp.azure.com
+vm-linux-04.canadacentral.cloudapp.azure.com
+
+[windows]
+win-vm.canadacentral.cloudapp.azure.com
+
+[os:children]
+linux
+windows
+
+[linux:vars]
+ansible_user = adminuser
+ansible_password =""
+
+
+[windows:vars]
+ansible_user=adminuser
+ansible_password="Password123!@#"
+ansible_connection=winrm
+ansible_port=5985
+ansible_winrm_transport=ntlm
+ansible_winrm_server_cert_validation=ignore
